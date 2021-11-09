@@ -3,7 +3,7 @@ traces_files = dir(fullfile(traces_dir,'*.mat')); %gets all wav files in struct
 traces_all = zeros (5003,1);
 traces_names = ["hi"];
 i = 0;
-for k = 1:1000%length(traces_files)
+for k = 1:100%length(traces_files)
     i = i+1;
   baseFileName = traces_files(k).name;
   fullFileName = traces_dir + "/" + baseFileName;
@@ -16,23 +16,13 @@ for k = 1:1000%length(traces_files)
       traces = cat(2,traces,cell2mat(struct2cell(load (fullFileName))) );
   end
   
-  if mod(k,250) == 0
+  if mod(k,1) == 0
     traces_all = cat(2,traces_all,traces);
     i = 0;
   end 
   traces_names = cat(2,traces_names,traces_files(k).name(1:16));
-  % call selection function
-  % if bit_flip is 1 put in bucket one and inc one count.
-  % if bit_flip is 0 put in bucket zero and inc zero count. 
-  
-  % all of your actions for filtering and plotting go here
+
 end
-% average 1's bit_flip
-% average 0's bit_flip
-% average 0's - average 1's
-% plot and save figure with key value
-% increment key value and perform again for k = 0: 63
-%remove first row of zeros
   traces_names = traces_names(:,2:size(traces_names,2));
   traces_all = traces_all(:,2:size(traces_all,2));
   clear i k traces traces_files

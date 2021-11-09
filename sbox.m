@@ -2,8 +2,8 @@ function [dout] = sbox(addr, lookup)
 %SBOX Summary of this function goes here
 %   Detailed explanation goes here
 
-addr_perm = cat(2,addr(1),addr(6),addr(2:5));
-addr_dec = binaryVectorToDecimal(addr_perm);
+addr_perm = cat(1,addr(1),addr(6),addr(2:5))';
+addr_dec = binaryVectorToDecimal(addr_perm,'LSBFirst');
 
 switch (lookup)
     

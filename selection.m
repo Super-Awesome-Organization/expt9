@@ -1,22 +1,22 @@
-function selection (M,b,K)
+function [flip] = selection (M,b,K)
     % M is plaintext
-    % b is register that is chosen
-    % K is 6 bit key guess (0 to 63)
+    % b is register that is chosen as a decimal 
+    % K is 6 bit key guess (0 to 63) as a decimal
     
     % Checks if K and b are vaild values
     if K < 0 || K > 63
         display("INVALID K VALUE")
         
     end
-    if b < 1 || b > 322
+    if b < 1 || b > 32
         display("INVALID b VALUE")
         
     end
     
     % converts Plaintext(M) and Key(K) to binary
     %traces_names_binary = hexToBinaryVector(traces_names,64);
-    desIn = hexToBinaryVector(M,64)';
-    K_binary = decimalToBinaryVector(K,6)';
+    desIn = hexToBinaryVector(M,64,'LSBFirst')';
+    K_binary = decimalToBinaryVector(K,6,'LSBFirst')';
     
     %inital permutation plaintext binary (M)
     perm1 = cat(1,desIn(06+1,:), desIn(14+1,:), desIn(22+1,:), desIn(30+1,:), desIn(38+1,:), desIn(46+1,:),...
@@ -51,34 +51,58 @@ function selection (M,b,K)
     % Compute the xor between E and Key
     % Only a specific bit will be checked rest of X is don't care
     offset = 0;
-    X8 = xor(E(1+offset:6+offset), K_binary);
+    X0 = xor(E(1+offset:6+offset), K_binary);
     offset = 6;
-    X7 = xor(E(1+offset:6+offset), K_binary);
+    X1 = xor(E(1+offset:6+offset), K_binary);
     offset = 12;
-    X6 = xor(E(1+offset:6+offset), K_binary);
+    X2 = xor(E(1+offset:6+offset), K_binary);
     offset = 18;
-    X5 = xor(E(1+offset:6+offset), K_binary);
+    X3 = xor(E(1+offset:6+offset), K_binary);
     offset = 24;
     X4 = xor(E(1+offset:6+offset), K_binary);
     offset = 30;
-    X3 = xor(E(1+offset:6+offset), K_binary);
+    X5 = xor(E(1+offset:6+offset), K_binary);
     offset = 36;
-    X2 = xor(E(1+offset:6+offset), K_binary);
+    X6 = xor(E(1+offset:6+offset), K_binary);
     offset = 42;
-    X1 = xor(E(1+offset:6+offset), K_binary);
+    X7 = xor(E(1+offset:6+offset), K_binary);
     
     % Compute the S-box
     % insert code
+    dout = cat (1, decimalToBinaryVector(sbox(X0,1),4,'LSBFirst')',...
+                   decimalToBinaryVector(sbox(X1,2),4,'LSBFirst')',...
+                   decimalToBinaryVector(sbox(X2,3),4,'LSBFirst')',...
+                   decimalToBinaryVector(sbox(X3,4),4,'LSBFirst')',...
+                   decimalToBinaryVector(sbox(X4,5),4,'LSBFirst')',...
+                   decimalToBinaryVector(sbox(X5,6),4,'LSBFirst')',...
+                   decimalToBinaryVector(sbox(X6,7),4,'LSBFirst')',...
+                   decimalToBinaryVector(sbox(X7,8),4,'LSBFirst')')';
+   S = dout'; 
     
     % Compute the P block
-    % insert code
+     out = cat (1,S(16,:), S(7,:), S(20,:), S(21,:), S(29,:), S(12,:), S(28,:),...
+            S(17,:), S(1,:), S(15,:), S(23,:), S(26,:), S(5,:), S(18,:),...
+            S(31,:), S(10,:), S(2,:), S(8,:), S(24,:), S(14,:), S(32,:),...
+            S(27,:), S(3,:), S(9,:), S(19,:), S(13,:), S(30,:), S(6,:),...
+            S(22,:), S(11,:), S(4,:), S(25,:))';
+    
+    
     
     % end CRP
     
     % XOR Xin and P block
-    % insert code
+    Rout = xor(Xin',out);
     
-    % check bit flip of bit b from "XOR Xin and P block" and perm1
+    
+    % check bit flip of bit b from "XOR Rout" and Lout
     % insert code if bit is the same output 0 else output 1
+    
+    if Rout (b) == Lout (b)
+        flip = 0;
+    else
+        flip = 1;
+        
+    end    
+    
     
 end
