@@ -1,6 +1,8 @@
 
 %Import all traces from files
-importTraces
+delete(gcp('nocreate'))
+parpool(8);
+%importTraces
 
 %bit value being found
 
@@ -9,7 +11,10 @@ b = [5 32 4 8 26 24 13 9];
 
 
 for bit = 1:length(b)
-    for k = 0:63
+
+    parfor k = 0:63  
+     [traces_names,full_names] = getTraceNames
+     b = [5 32 4 8 26 24 13 9];
     fprintf(1,'Round %d of 64 for Bit %d\n', k+1, bit);
     zero_bucket = zeros(5003,1);
     one_bucket = zero_bucket;
@@ -23,12 +28,12 @@ for bit = 1:length(b)
           % if bit_flip is 1 put in bucket one and inc one count.
           if flip == 1
                 one_bucket_count = one_bucket_count +1;
-                one_bucket = one_bucket + traces_all (:,i);
+                one_bucket = one_bucket + getTrace(full_names(:,i));
           end    
           % if bit_flip is 0 put in bucket zero and inc zero count. 
           if flip == 0
                 zero_bucket_count = zero_bucket_count +1;
-                zero_bucket = zero_bucket + traces_all (:,i);
+                zero_bucket = zero_bucket + getTrace(full_names(:,i));
           end    
 
 
