@@ -1,3 +1,20 @@
+% Group 2: Raj Patel, Zachary Rouviere, Evan Waxman
+% Experiement 9 Part 2
+% 11/15/21
+%
+% Description:
+%	selection.m function determines if a specific bit b filps during the
+%	first round or not. If it does filp the function returns 1 otherwise it
+%	returns 0. The function takes in the plaintext(M), bit register to
+%	determine bit flip (b), and 6 bit subkey guess (K). The selection
+%	function was created by implmenting the first round of DES and checking
+%	if the bit,b, in Lout filps when compared to the last xor, Rout bit b.
+%	First an intial permutation is done on M. Then the initial permutation
+%	is split into Xin and Lout. Xin is then permutated to create the E
+%	block in the crp function (from expt 4). Then the E block is xor with
+%	the guess key K. From their 8 Sboxes are used. The result of the Sboxes
+%	are permutated and the permutation result is xor'd with Xin.
+
 function [flip] = selection (M,b,K)
     % M is plaintext
     % b is register that is chosen as a decimal 
@@ -94,7 +111,7 @@ function [flip] = selection (M,b,K)
     Rout = xor(Xin',out);
     
     
-    % check bit flip of bit b from "XOR Rout" and Lout
+    % check bit flip of bit b from Rout and Lout
     % insert code if bit is the same output 0 else output 1
     
     if Rout (b) == Lout (b)

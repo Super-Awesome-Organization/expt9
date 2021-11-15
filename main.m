@@ -1,3 +1,19 @@
+% Group 2: Raj Patel, Zachary Rouviere, Evan Waxman
+% Experiement 9 Part 2
+% 11/15/21
+%
+% Description:
+%	main.m script will divide the traces into two buckets based on the
+%	selection function. After all 80K traces for a bit b and a subkey k are
+%	spreated the script will take the average of each of the buckets. Then
+%	the difference of mean is computed. This script is used to generated
+%	the trace pictures for each of the b and k values. This script will
+%	take each b value and find which k produces the highest peak. The
+%	subkey and the max peak value are save to a .csv file for the
+%	keyselection script. To obtain the traces for the 8 b's uncomment the b
+%	arrays with 8 elements and commentout the b arrays with 32 elements. To
+%	speed up the excution time of this code the paraellel computing tool
+%	box was used.
 
 %Import all traces from files
 delete(gcp('nocreate'))
@@ -9,7 +25,7 @@ parpool(8);
 b = [5 27 15 21 32 12 22 7 4 29 11 19 8 14 25 3 26 20 10 1 24 16 30 6 13 28 2 18 9 17 23 31];
 
 
-%Bits with greatest values for each sbox:
+%Bits with greatest values for each sbox MSB (left) to LSB (right):
 %b = [21 7 29 14 10 6 28 9];
 
 %run a for loop in parallel for each b
@@ -75,6 +91,7 @@ parfor bit = 1:length(b)
     saveas(g,output_file)    
 
     end     % increment key value and perform again for k = 0: 63
+    
     %Output maximum value for each b     
    write_data = cat(2, max_k,max_diff);
     output_file = strcat('./csv/', string(b(bit)), '.csv');

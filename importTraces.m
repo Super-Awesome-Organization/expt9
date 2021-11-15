@@ -1,3 +1,10 @@
+% Group 2: Raj Patel, Zachary Rouviere, Evan Waxman
+% Experiement 9 Part 2
+% 11/15/21
+%
+% Description:
+%	importTraces.m function
+
 function [traces_all,traces_names] = importTraces
 
 traces_dir = "./traces"; %gets directory

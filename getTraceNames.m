@@ -1,3 +1,12 @@
+% Group 2: Raj Patel, Zachary Rouviere, Evan Waxman
+% Experiement 9 Part 2
+% 11/15/21
+%
+% Description:
+%	getTraceNames.m function obtains the trace file and returns the
+%	plaintext name (traces_names) and the full name of the file
+%	(full_names).
+
 function [traces_names,full_names] = getTraceNames
 
 traces_dir = "./traces"; %gets directory

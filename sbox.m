@@ -1,11 +1,26 @@
+% Group 2: Raj Patel, Zachary Rouviere, Evan Waxman
+% Experiement 9 Part 2
+% 11/15/21
+%
+% Description:
+%	sbox.m function contains 8 different lookup tables LUTs. The inputs to this
+%	function are the 6 bit data (addr) and the sbox lookup table it should use
+%	(lookup). The function return the corresponding 4 bit value in the LUT. The
+%	data is passed in and the 6th bit is moved to bit postition 2. Then the
+%	LUT is performed on the modified data. Sub functions were created for 
+%   each sbox LUT. The functionality of the sbox's
+%	and LUTs were taken from the expt 4 sbox verilog files.
+
 function [dout] = sbox(addr, lookup)
 %SBOX Summary of this function goes here
 %   Create lookup table for each SBOX that matches provided DES verilog
 %   code
 
+% move bit 6 to postion 2
 addr_perm = cat(1,addr(1),addr(6),addr(2:5))';
 addr_dec = binaryVectorToDecimal(addr_perm,'LSBFirst');
 
+% determines which sbox to pull the LUT for
 switch (lookup)
     
     case 1
@@ -28,6 +43,8 @@ switch (lookup)
     end
 
 end
+
+% Sbox 1 LUT
 function [dout] = sbox1(addr_dec)
 
 switch (addr_dec) 
@@ -165,6 +182,7 @@ case  63
 end
 end
 
+% Sbox 2 LUT
 function [dout] = sbox2(addr_dec)
 switch (addr_dec)
     case 0
@@ -302,6 +320,7 @@ case  63
 end
 end
 
+% Sbox 3 LUT
 function [dout] = sbox3(addr_dec)
 switch (addr_dec)
     case  0
@@ -440,6 +459,7 @@ case 63
 end
 end
 
+% Sbox 4 LUT
 function [dout] = sbox4(addr_dec)
 switch (addr_dec)
 case    0
@@ -578,6 +598,7 @@ case  63
 end
 end
 
+% Sbox 5 LUT
 function [dout] = sbox5(addr_dec)
 switch (addr_dec)
     case  0
@@ -715,6 +736,7 @@ case 63
 end
 end
 
+% Sbox 6 LUT
 function [dout] = sbox6(addr_dec)
 switch (addr_dec)
     case   0
@@ -852,6 +874,7 @@ case  63
 end
 end
 
+% Sbox 7 LUT
 function [dout] = sbox7(addr_dec)
 switch (addr_dec)
     case  0
@@ -989,6 +1012,7 @@ case 63
 end
 end
 
+% Sbox 8 LUT
 function [dout] = sbox8(addr_dec)
 switch (addr_dec)
 case 0
