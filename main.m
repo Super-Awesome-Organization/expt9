@@ -4,17 +4,27 @@ delete(gcp('nocreate'))
 parpool(8);
 %importTraces
 
-%bit value being found
+%permutated bits that coorespond with each sbox (8 downto 1)
 
-%b values to test: 5, 32, 4, 8, 26, 24,13, 9
-b = [5 32 4 8 26 24 13 9];
+b = [5 27 15 21 32 12 22 7 4 29 11 19 8 14 25 3 26 20 10 1 24 16 30 6 13 28 2 18 9 17 23 31];
 
 
-for bit = 1:length(b)
+%Bits with greatest values for each sbox:
+%b = [21 7 29 14 10 6 28 9];
 
-    parfor k = 0:63  
-     [traces_names,full_names] = getTraceNames
-     b = [5 32 4 8 26 24 13 9];
+%run a for loop in parallel for each b
+parfor bit = 1:length(b)
+    %Redefine b so can run in parallel
+    b = [5 27 15 21 32 12 22 7 4 29 11 19 8 14 25 3 26 20 10 1 24 16 30 6 13 28 2 18 9 17 23 31];
+    %b = [21 7 29 14 10 6 28 9];
+    max_diff = 0;
+    max_k = 0;
+    %Get the list of names for the trace files and their cooresponding
+    %input values in hex
+    %must be in loop to run in parallel
+    [traces_names,full_names] = getTraceNames
+    %Run each guess against each bit value
+    for k = 0:63  
     fprintf(1,'Round %d of 64 for Bit %d\n', k+1, bit);
     zero_bucket = zeros(5003,1);
     one_bucket = zero_bucket;
@@ -46,17 +56,31 @@ for bit = 1:length(b)
 
     % average 0's - average 1's
     diff = zero_bucket_final - one_bucket_final;
+    
+    %Get max diff for bit
+    if max(diff) > max_diff
+       max_diff = max(diff);
+       max_k = k;
+    end        
 
+     
+    
     % plot and save figure with key value
     g = plot (diff);
-    title("Using Subkey " + k + " for Bit " + b(bit));
-    xlabel("Sample");
-    ylabel("Amplitude");
+    title("Difference of Average Traces Using Subkey " + k + " for Bit " + b(bit));
+    xlabel("Trace Over Time");
+    ylabel("Voltage Difference");
 
     output_file = strcat('./graphs/Bit'," ", string(b(bit)), ' Key '," ", string(k), '.png');
     saveas(g,output_file)    
 
     end     % increment key value and perform again for k = 0: 63
+    %Output maximum value for each b     
+   write_data = cat(2, max_k,max_diff);
+    output_file = strcat('./csv/', string(b(bit)), '.csv');
+    csvwrite(output_file,write_data);
+    
+    
 end
 
 

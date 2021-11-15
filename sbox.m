@@ -1,6 +1,7 @@
 function [dout] = sbox(addr, lookup)
 %SBOX Summary of this function goes here
-%   Detailed explanation goes here
+%   Create lookup table for each SBOX that matches provided DES verilog
+%   code
 
 addr_perm = cat(1,addr(1),addr(6),addr(2:5))';
 addr_dec = binaryVectorToDecimal(addr_perm,'LSBFirst');

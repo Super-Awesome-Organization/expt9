@@ -5,6 +5,8 @@ traces_files = dir(fullfile(traces_dir,'*.mat')); %gets all wav files in struct
 traces_names = ["hi"];
 full_names = ["hi"];
 i = 0;
+
+%Get the file name and input name for each trace
 for k = 1:length(traces_files)
     i = i+1;
   baseFileName = traces_files(k).name;
